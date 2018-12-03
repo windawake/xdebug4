@@ -1,0 +1,26 @@
+version: '2'
+services:
+    nginx.dev:
+        image: "nginx"
+        ports:
+            - "8080:80"
+        volumes:
+            - ".:/web"
+            - "./conf.d:/etc/nginx/conf.d"
+        networks:
+            - xdebug_net
+        container_name: nginx.dev
+    php.dev:
+        image: "php-with-ext"
+        build:
+            context: .
+            dockerfile: Dockerfile
+        volumes:
+            - ".:/web"
+        networks:
+            - xdebug_net
+        container_name: php.dev
+        environment:
+          XDEBUG_CONFIG: remote_host=host.docker.internal
+networks:
+    xdebug_net:
